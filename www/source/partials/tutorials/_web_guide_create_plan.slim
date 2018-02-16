@@ -3,45 +3,67 @@ section
 
  p At the center of Habitat packaging is the plan. This is a directory comprised of shell scripts and optional configuration files that define how you download, configure, make, install, and manage the lifecycle of the software in the package. When writing a plan, it's important to understand that you are defining both how the package is built and how the Habitat service will behave when the Supervisor starts and manages the child process in the package.
 
- p As demonstrated in #{link_to 'Build a Sample App', '/tutorials/sample-app/'}, the quickest way to get started building your application with Habitat is by using scaffolding. Scaffolding helps you build and package applications which follow the common patterns and practices for that application type. The more your application follows convention, the more scaffolding helps you.
+- if "#{current_page.data.platform_short}" != "aspnet-core"
+   p As demonstrated in #{link_to 'Build a Sample App', '/tutorials/sample-app/'}, the quickest way to get started building your application with Habitat is by using scaffolding. Scaffolding helps you build and package applications which follow the common patterns and practices for that application type. The more your application follows convention, the more scaffolding helps you.
 
  - if "#{current_page.data.platform_short}" == "ruby"
    p For a Ruby-on-Rails application, the Ruby scaffolding parses your Gemfile and uses that information to build your application with the dependencies listed there. It will also detect what version of Rails you're running and set sensible default behaviors for your <code>init</code> and <code>run</code> hooks.
 
- p To use scaffolding, navigate to the root of your project repo and run the following:
+ - if "#{current_page.data.platform_short}" == "aspnet-core"
+   p To create your plan, navigate to the root of your project repo and run the following:
+ 
+   = code(:shell) do
+     |
+       PS C:\\> hab plan init --windows
 
- = code(:shell) do
-   |
-    $ hab plan init -s #{current_page.data.platform_short}
+   p Using <code>hab plan init</code> will result in a new directory located at <code>/path/to/repo/habitat</code> on your workstation. A <code>plan.ps1</code> file will be created and the <code>$pkg_name</code> variable in it will be set to the name of the parent directory. Also, any environment variables that you have previouly set (such as <code>HAB_ORIGIN</code>) will be used to populate the respective <code>$pkg_*</code> variables. Because you specified the <code>--windows</code> argument, your plan is a .ps1 file with Powershell syntax, if you had not used the <code>--windows</code> argument, a plan.sh bash file would have been generated.
+ - else
+   p To use scaffolding, navigate to the root of your project repo and run the following:
 
- p Using <code>hab plan init</code> will result in a new directory located at <code>/path/to/repo/habitat</code> on your workstation. A <code>plan.sh</code> file will be created and the <code>pkg_name</code> variable in it will be set to the name of the parent directory. Also, any environment variables that you have previouly set (such as <code>HAB_ORIGIN</code>) will be used to populate the respective <code>pkg_*</code> variables. Because you specified the #{current_page.data.platform} scaffolding as an argument, your plan.sh will also include a reference to it.
+   = code(:shell) do
+     |
+       $ hab plan init -s #{current_page.data.platform_short}
+
+   p Using <code>hab plan init</code> will result in a new directory located at <code>/path/to/repo/habitat</code> on your workstation. A <code>plan.sh</code> file will be created and the <code>pkg_name</code> variable in it will be set to the name of the parent directory. Also, any environment variables that you have previouly set (such as <code>HAB_ORIGIN</code>) will be used to populate the respective <code>pkg_*</code> variables. Because you specified the #{current_page.data.platform} scaffolding as an argument, your plan.sh will also include a reference to it.
 
  p See #{link_to 'hab plan init', '/docs/reference/habitat-cli#hab-plan-init'} for more information on how to use this subcommand.
 
  p The basic structure of a plan is shown below:
 
- = code(:shell) do
-   |
-    $ tree /habitat
-    .
-    ├── config
-    ├── default.toml
-    ├── hooks
-    └── plan.sh
+ - if "#{current_page.data.platform_short}" == "aspnet-core"
+   = code(:shell) do
+     |
+       PS C:\\> tree habitat
+       .
+       ├── config
+       ├── default.toml
+       ├── hooks
+       └── plan.ps1
+ - else
+   = code(:shell) do
+     |
+       $ tree /habitat
+       .
+       ├── config
+       ├── default.toml
+       ├── hooks
+       └── plan.sh
 
  blockquote
-  p Note: The plan.sh file is the only required file to create a package. Configuration files, runtime hooks, and other source files are optional. For more information on creating plans, see the #{link_to 'Writing plans', '/docs/developing-packages/#write-plans'} section of the reference documentation.
+  p Note: The plan file is the only required file to create a package. Configuration files, runtime hooks, and other source files are optional. For more information on creating plans, see the #{link_to 'Writing plans', '/docs/developing-packages/#write-plans'} section of the reference documentation.
 
  h2 Versioning
 
  = partial "partials/global/versioning_concepts"
 
- - if "#{current_page.data.platform_short}" != "gradle"
-   h3 Defining the #{current_page.data.platform} version
- - else
-   h3 Defining #{current_page.data.platform} and Java-related version information
+ - if "#{current_page.data.platform_short}" != "aspnet-core"
+   - if "#{current_page.data.platform_short}" != "gradle"
+     h3 Defining the #{current_page.data.platform} version
+   - else
+     h3 Defining #{current_page.data.platform} and Java-related version information
 
- = partial "/partials/tutorials/web_guide_#{current_page.data.platform_short}_version"
+ - if "#{current_page.data.platform_short}" != "aspnet-core"
+   = partial "/partials/tutorials/web_guide_#{current_page.data.platform_short}_version"
 
  -if "#{current_page.data.platform_short}" == "node"
   h2 Package manager detection
