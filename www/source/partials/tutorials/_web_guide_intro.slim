@@ -24,7 +24,8 @@ section
   li #{link_to 'Define Build Logic For Your App',"/tutorials/build-your-own/#{current_page.data.platform_short}/define-build-logic/"}: Define how source code for your web application is built and installed as part of the package creation process.
   li #{link_to 'Define Hooks',"/tutorials/build-your-own/#{current_page.data.platform_short}/define-hooks/"}: Define runtime behavior for your application.
   li #{link_to 'Define Environment Variables',"/tutorials/build-your-own/#{current_page.data.platform_short}/define-variables/"}: Set and configure environment variables that can be used at runtime.
-  li #{link_to 'Define Processes',"/tutorials/build-your-own/#{current_page.data.platform_short}/define-processes/"}: Define tasks for binaries included in your web application.
+  - if "#{current_page.data.platform_short}" != "aspnet-core"
+    li #{link_to 'Define Processes',"/tutorials/build-your-own/#{current_page.data.platform_short}/define-processes/"}: Define tasks for binaries included in your web application.
   li #{link_to 'Add Configuration',"/tutorials/build-your-own/#{current_page.data.platform_short}/add-config/"}: Specify which settings on your web application can be configured at runtime.
   li #{link_to 'Build and Test',"/tutorials/build-your-own/#{current_page.data.platform_short}/build-test/"}: Learn how to build, test, and run your web application package.
   - if "#{current_page.data.platform_short}" == "ruby"
